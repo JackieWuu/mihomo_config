@@ -1,10 +1,3 @@
-# ----------------- 【必看】使用说明 start ----------------- #
-# 使用如下命令获取 nikki 的 webui 配置，以配合配置文件使用：
-# wget -O /etc/config/nikki https://gitee.com/jackiewuu/unraid/raw/master/nikki/nikki
-#
-# ----------------- 【必看】使用说明 end ----------------- #
-
-
 # ----------------- 机场订阅 start ----------------- #
 # 锚点
 Sub: &Sub {type: http, interval: 86400, proxy: DIRECT,override: {ip-version: ipv4-prefer}, health-check: {enable: true, url: https://www.gstatic.com/generate_204, interval: 300}}
@@ -120,7 +113,7 @@ dns:
   listen: 0.0.0.0:7874
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
-  respect-rules: true
+  respect-rules: false
   
   fake-ip-filter:
     - "geosite: google-play@cn,category-speedtest,category-ntp,category-public-tracker,tracker,category-games-cn,category-games-!cn,category-games@cn,steam@cn,category-game-platforms-download,category-game-accelerator-cn,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn"
