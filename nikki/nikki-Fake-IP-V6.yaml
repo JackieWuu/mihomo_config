@@ -52,7 +52,7 @@ experimental:
 # UI
 external-ui: "/etc/nikki/run/ui"
 external-ui-name: "zbashboard"
-external-ui-url: https://gh-proxy.com/github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip
+external-ui-url: "https://gh-proxy.com/github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
 external-controller: '[::]:9090'
 # API 认证：默认不开启认证，需要开启的请自行修改
 #secret: "109188"
