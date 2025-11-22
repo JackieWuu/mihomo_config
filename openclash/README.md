@@ -27,7 +27,7 @@
 请注意！请使用如下命令获取 OpenClash 的 luci 配置，以配合配置文件使用，否则可能不能正常使用博主的配置：
 
 ```
-wget -O /etc/config/openclash https://gitee.com/jackiewuu/unraid/raw/master/openclash/openclash
+wget -O /etc/config/openclash https://raw.githubusercontent.com/JackieWuu/mihomo_config/refs/heads/main/openclash/openclash
 ```
 下载之后即可正常启动 openclash 。
 

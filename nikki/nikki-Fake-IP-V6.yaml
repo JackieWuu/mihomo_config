@@ -142,23 +142,23 @@ dns:
 
     # 国外 AI 平台
     "geosite: google-gemini":
-    - 'quic://8.8.8.8#🤖 Gemini
-    - 'quic://1.1.1.1#🤖 Gemini'
+    - 'https://8.8.8.8/dns-query#🤖 Gemini
+    - 'https://1.1.1.1/dns-query#🤖 Gemini'
     "geosite: openai":
-    - 'quic://8.8.8.8#🤖 OpenAI'
-    - 'quic://1.1.1.1#🤖 OpenAI'
+    - 'https://8.8.8.8/dns-query#🤖 OpenAI'
+    - 'https://1.1.1.1/dns-query#🤖 OpenAI'
     "geosite: category-ai-chat-!cn":
-    - 'quic://8.8.8.8#🤖 AI'
-    - 'quic://1.1.1.1#🤖 AI'
+    - 'https://8.8.8.8/dns-query#🤖 AI'
+    - 'https://1.1.1.1/dns-query#🤖 AI'
 
     # 测速
     "geosite: category-speedtest":
-    - 'quic://8.8.8.8#⏩ Speedtest'
-    - 'quic://1.1.1.1#⏩ Speedtest'
+    - 'https://8.8.8.8/dns-query#⏩ Speedtest'
+    - 'https://1.1.1.1/dns-query#⏩ Speedtest'
 
     "geosite: geolocation-!cn":
-    - 'quic://8.8.8.8#🎯 代理'
-    - 'quic://1.1.1.1#🎯 代理'
+    - 'https://8.8.8.8/dns-query#🎯 代理'
+    - 'https://1.1.1.1/dns-query#🎯 代理'
 
   direct-nameserver:
     - 'quic://223.5.5.5'
@@ -169,8 +169,8 @@ dns:
     - 'quic://223.6.6.6'
   
   fallback:
-    - 'quic://8.8.8.8#🎯 代理'
-    - 'quic://1.1.1.1#🎯 代理'
+    - 'https://8.8.8.8/dns-query#🎯 代理'
+    - 'https://1.1.1.1/dns-query#🎯 代理'
 
 
   fallback-filter:
