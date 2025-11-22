@@ -52,7 +52,7 @@ experimental:
 # UI
 external-ui: "/etc/nikki/run/ui"
 external-ui-name: "zbashboard"
-external-ui-url: "https://gh-proxy.com/github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
+external-ui-url: https://gh-proxy.com/github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip
 external-controller: '[::]:9090'
 # API 认证：默认不开启认证，需要开启的请自行修改
 #secret: "109188"
@@ -98,9 +98,10 @@ sniffer:
       ports: [443, 8443]
     QUIC:
       ports: [443, 8443]
-      override-destination: true
   skip-domain:
     - "+.push.apple.com"
+  # skip-src-address:
+  #   - 10.0.0.5/32
   
 dns:
   enable: true
@@ -109,40 +110,39 @@ dns:
   cache-algorithm: arc
   prefer-h3: false
   use-hosts: true
-  use-system-hosts: true
+  use-system-hosts: false
   listen: 0.0.0.0:7874
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   respect-rules: false
   
   fake-ip-filter:
-    - "geosite: google-play@cn,category-speedtest,category-ntp,category-public-tracker,tracker,category-games-cn,category-games-!cn,category-games@cn,steam@cn,category-game-platforms-download,category-game-accelerator-cn,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn"
+    - "geosite: google-play@cn,category-speedtest,category-ntp,category-public-tracker,tracker,reddit,category-games-cn,category-games-!cn,category-games@cn,steam@cn,category-game-platforms-download,category-game-accelerator-cn,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn"
     - "*"
     - "+.lan"
     - "+.local"
 
   default-nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
   proxy-server-nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    - quic://223.5.5.5
+    - quic://223.6.6.6
   
   nameserver-policy:
     "geosite:category-ads-all": rcode://name_error
-
     "geosite:google-play@cn,category-ntp,category-public-tracker,tracker,category-games-cn,category-games@cn,steam@cn,category-games-!cn,category-game-platforms-download,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn":
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
-    "+.gh-proxy.com":
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    "+.gstatic.com":
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
     # 国外 AI 平台
     "geosite: google-gemini":
-    - 'https://8.8.8.8/dns-query#🤖 Gemini
+    - 'https://8.8.8.8/dns-query#🤖 Gemini'
     - 'https://1.1.1.1/dns-query#🤖 Gemini'
     "geosite: openai":
     - 'https://8.8.8.8/dns-query#🤖 OpenAI'
@@ -161,12 +161,12 @@ dns:
     - 'https://1.1.1.1/dns-query#🎯 代理'
 
   direct-nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
   nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    - quic://223.5.5.5
+    - quic://223.6.6.6
   
   fallback:
     - 'https://8.8.8.8/dns-query#🎯 代理'
@@ -200,7 +200,7 @@ dns:
     #domain:
       #- '+.jsdelivr.net'
 
-# -----------------  高级参数配置 end ----------------- #
+# ----------------- OpenClash 高级参数配置 end ----------------- #
 
 
 # ----------------- 锚点 start ----------------- #
@@ -218,7 +218,8 @@ Block: &Block {type: select, proxies: [🚫 阻断, 🔰 直连]}
 # ----------------- 锚点 end ----------------- #
 
 
-# ----------------- 代理组 start ----------------- #
+
+# ----------------- #代理组 start ----------------- #
 proxies:
 
   - {name: "🔰 直连", type: direct, udp: true}

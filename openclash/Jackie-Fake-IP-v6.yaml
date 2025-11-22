@@ -137,7 +137,7 @@ dns:
 
     # 国外 AI 平台
     "geosite: google-gemini":
-    - 'https://8.8.8.8/dns-query#🤖 Gemini
+    - 'https://8.8.8.8/dns-query#🤖 Gemini'
     - 'https://1.1.1.1/dns-query#🤖 Gemini'
     "geosite: openai":
     - 'https://8.8.8.8/dns-query#🤖 OpenAI'

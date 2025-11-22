@@ -90,7 +90,8 @@ config openclash 'config'
 	option auto_restart '0'
 	option auto_restart_week_time '1'
 	option auto_restart_day_time '0'
-	option dnsmasq_noresolv '1'
+	option dnsmasq_noresolv '0'
+	option dnsmasq_resolvfile '/tmp/resolv.conf.d/resolv.conf.auto'
 
 config dns_servers
 	option type 'udp'
