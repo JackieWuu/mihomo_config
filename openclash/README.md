@@ -27,7 +27,7 @@
 请注意！请使用如下命令获取 OpenClash 的 luci 配置，以配合配置文件使用，否则可能不能正常使用博主的配置：
 
 ```
-wget -O /etc/config/openclash https://raw.githubusercontent.com/JackieWuu/mihomo_config/refs/heads/main/openclash/openclash
+wget -O /etc/config/openclash https://cdn.jsdelivr.net/gh/JackieWuu/mihomo_config@main/openclash/openclash
 ```
 下载之后即可正常启动 openclash 。
 
@@ -35,6 +35,6 @@ wget -O /etc/config/openclash https://raw.githubusercontent.com/JackieWuu/mihomo
 如果是在 openwrt 上面使用 openclash，请使用如下命令在 openwrt 上手动下载 `Geoip.dat` 文件到 openclash 的配置我文件夹：
 
 ```
-wget -O GeoIP.dat https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+wget -O GeoSite.dat https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
 ```
 下载之后即可正常启动 openclash 。
