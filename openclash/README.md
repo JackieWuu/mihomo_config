@@ -35,6 +35,6 @@ wget -O /etc/config/openclash https://cdn.jsdelivr.net/gh/JackieWuu/mihomo_confi
 如果是在 openwrt 上面使用 openclash，请使用如下命令在 openwrt 上手动下载 `Geoip.dat` 文件到 openclash 的配置我文件夹：
 
 ```
-wget -O GeoSite.dat https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+wget -O /etc/openclash/GeoSite.dat https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
 ```
 下载之后即可正常启动 openclash 。

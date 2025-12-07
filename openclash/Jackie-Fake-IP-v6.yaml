@@ -7,7 +7,7 @@ proxy-providers:
   provider-1:
     <<: *Sub
     # 订阅地址
-    url: ""
+    url: "此处替换为你的订阅链接"
     override:
       additional-prefix: "[✈️-1]"
       udp: true
@@ -16,7 +16,7 @@ proxy-providers:
   # provider-2:
   #   <<: *Sub
   #   # 订阅地址
-  #   url: ""
+  #   url: "此处替换为你的订阅链接"
   #   override:
   #     additional-prefix: "[✈️-2]"
   #     udp: true
@@ -28,9 +28,9 @@ proxy-providers:
 # 代理配置
 port: 7890
 socks-port: 7891
-mixed-port: 7890
-tproxy-port: 7895
 redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7895
 mode: rule
 bind-address: "*"
 ipv6: false
@@ -78,7 +78,33 @@ tun:
     - 0.0.0.0:53
   route-exclude-address-set:
     - cn_ip
-    
+  route-exclude-address:
+    # 绕过 Apple 推送通知服务（参考：https://support.apple.com/zh-cn/102266）
+    - 17.249.0.0/16
+    - 17.252.0.0/16
+    - 17.57.144.0/22
+    - 17.188.128.0/18
+    - 17.188.20.0/23
+    ## Private IP
+    - 0.0.0.0/8
+    - 10.0.0.0/8
+    - 100.64.0.0/10
+    - 127.0.0.0/8
+    - 169.254.0.0/16
+    - 172.16.0.0/12
+    - 192.0.0.0/24
+    - 192.0.2.0/24
+    - 192.88.99.0/24
+    - 192.168.0.0/16
+    # Fake-IP
+    #- 198.18.0.0/15
+    - 198.51.100.0/24
+    - 203.0.113.0/24
+    #- 224.0.0.0/3
+    #- ::/127
+    #- fc00::/7
+    #- fe80::/10
+    #- ff00::/8
 
 sniffer:
   enable: true
@@ -93,9 +119,10 @@ sniffer:
       ports: [443, 8443]
     QUIC:
       ports: [443, 8443]
-      override-destination: true
   skip-domain:
     - "+.push.apple.com"
+  # skip-src-address:
+  #   - 10.0.0.5/32
   
 dns:
   enable: true
@@ -104,69 +131,43 @@ dns:
   cache-algorithm: arc
   prefer-h3: false
   use-hosts: true
-  use-system-hosts: true
+  use-system-hosts: false
   listen: 0.0.0.0:7874
-  fake-ip-range: 198.18.0.1/16
+  fake-ip-range: 198.18.0.0/15
   fake-ip-filter-mode: blacklist
   respect-rules: false
   
   fake-ip-filter:
-    - "geosite: google-play@cn,category-speedtest,category-ntp,category-public-tracker,tracker,category-games-cn,category-games-!cn,category-games@cn,steam@cn,category-game-platforms-download,category-game-accelerator-cn,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn"
+    - "geosite: google-play@cn,category-speedtest,category-ntp,category-public-tracker,tracker,reddit,category-games-cn,category-games-!cn,category-games@cn,steam@cn,category-game-platforms-download,category-game-accelerator-cn,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn"
     - "*"
     - "+.lan"
     - "+.local"
 
-  default-nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
-
-  proxy-server-nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
-  
   nameserver-policy:
     "geosite:category-ads-all": rcode://name_error
-
     "geosite:google-play@cn,category-ntp,category-public-tracker,tracker,category-games-cn,category-games@cn,steam@cn,category-games-!cn,category-game-platforms-download,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn":
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
-    "+.gh-proxy.com":
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+  default-nameserver:
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
-    # 国外 AI 平台
-    "geosite: google-gemini":
-    - 'https://8.8.8.8/dns-query#🤖 Gemini'
-    - 'https://1.1.1.1/dns-query#🤖 Gemini'
-    "geosite: openai":
-    - 'https://8.8.8.8/dns-query#🤖 OpenAI'
-    - 'https://1.1.1.1/dns-query#🤖 OpenAI'
-    "geosite: category-ai-chat-!cn":
-    - 'https://8.8.8.8/dns-query#🤖 AI'
-    - 'https://1.1.1.1/dns-query#🤖 AI'
-
-    # 测速
-    "geosite: category-speedtest":
-    - 'https://8.8.8.8/dns-query#⏩ Speedtest'
-    - 'https://1.1.1.1/dns-query#⏩ Speedtest'
-
-    "geosite: geolocation-!cn":
-    - 'https://8.8.8.8/dns-query#🎯 代理'
-    - 'https://1.1.1.1/dns-query#🎯 代理'
+  proxy-server-nameserver:
+    - quic://223.5.5.5
+    - quic://223.6.6.6
+  
+  nameserver:
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
   direct-nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
+    - quic://223.5.5.5
+    - quic://223.6.6.6
 
-  nameserver:
-    - 'quic://223.5.5.5'
-    - 'quic://223.6.6.6'
-  
   fallback:
     - 'https://8.8.8.8/dns-query#🎯 代理'
     - 'https://1.1.1.1/dns-query#🎯 代理'
-
 
   fallback-filter:
     geoip: true
@@ -194,7 +195,8 @@ dns:
       - ff00::/8
     #domain:
       #- '+.jsdelivr.net'
-# ----------------- 高级参数配置 end ----------------- #
+
+# ----------------- OpenClash 高级参数配置 end ----------------- #
 
 
 # ----------------- 锚点 start ----------------- #
@@ -210,8 +212,6 @@ Auto: &Auto {type: url-test, interval: 300, tolerance: 100, include-all-provider
 
 Block: &Block {type: select, proxies: [🚫 阻断, 🔰 直连]}
 # ----------------- 锚点 end ----------------- #
-
-
 
 # ----------------- #代理组 start ----------------- #
 proxies:
@@ -260,51 +260,53 @@ proxy-groups:
 
 
 # ----------------- 地区分组 start ----------------- #
+
   - {name: 🌏 手动选择, type: select, include-all: true, exclude-filter: "实验|应急|续费|流量"}
 
   - {name: 🔙 全节点故障转移, type: fallback, proxies: [🇭🇰 香港-自动, 🇯🇵 日本-自动,🇸🇬 新加坡-自动,🇨🇳 台湾-自动,🇺🇸 美国-自动,🌐 其它地区-自动]}
 
 
   # --- 香港分组 Start --- #
-  - {name: 🇭🇰 香港, proxies: [🇭🇰 香港-手动, 🇭🇰 香港-自动], <<: *Fallback}
+  - {name: 🇭🇰 香港, proxies: [🇭🇰 香港-自动, 🇭🇰 香港-手动], type: select,}
   - {name: 🇭🇰 香港-手动, filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$", <<: *Select}
   - {name: 🇭🇰 香港-自动, filter: "(?i)港|hk|hongkong|hong kong", <<: *Auto}
   # --- 香港分组 End --- #
 
 
   # --- 日本分组 Start --- #
-  - {name: 🇯🇵 日本, proxies: [🇯🇵 日本-手动, 🇯🇵 日本-自动], <<: *Fallback}
+  - {name: 🇯🇵 日本, proxies: [🇯🇵 日本-自动, 🇯🇵 日本-手动], type: select,}
   - {name: 🇯🇵 日本-手动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Select}
   - {name: 🇯🇵 日本-自动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Auto}
   # --- 日本分组 End --- #
 
 
   # --- 新加坡分组 Start --- #
-  - {name: 🇸🇬 新加坡, proxies: [🇸🇬 新加坡-手动, 🇸🇬 新加坡-自动], <<: *Fallback}
+  - {name: 🇸🇬 新加坡, proxies: [🇸🇬 新加坡-自动, 🇸🇬 新加坡-手动], type: select,}
   - {name: 🇸🇬 新加坡-手动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Select}
   - {name: 🇸🇬 新加坡-自动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Auto}
   # --- 新加坡分组 End --- #
 
 
   # --- 台湾分组 Start --- #
-  - {name: 🇨🇳 台湾, proxies: [🇨🇳 台湾-手动, 🇨🇳 台湾-自动], <<: *Fallback}
+  - {name: 🇨🇳 台湾, proxies: [🇨🇳 台湾-自动, 🇨🇳 台湾-手动], type: select,}
   - {name: 🇨🇳 台湾-手动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Select}
   - {name: 🇨🇳 台湾-自动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Auto}
   # --- 台湾分组 End --- #
 
 
   # --- 美国分组 Start --- #
-  - {name: 🇺🇸 美国, proxies: [🇺🇸 美国-手动, 🇺🇸 美国-自动], <<: *Fallback}
+  - {name: 🇺🇸 美国, proxies: [🇺🇸 美国-自动, 🇺🇸 美国-手动], type: select,}
   - {name: 🇺🇸 美国-手动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Select}
   - {name: 🇺🇸 美国-自动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Auto}
   # --- 美国分组 End --- #
 
 
   # --- 其他地区分组 Start --- #
-  - {name: 🌐 其它地区, proxies: [🌐 其它地区-手动, 🌐 其它地区-自动], <<: *Fallback}
+  - {name: 🌐 其它地区, proxies: [🌐 其它地区-自动, 🌐 其它地区-手动], type: select,}
   - {name: 🌐 其它地区-手动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Select}
   - {name: 🌐 其它地区-自动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Auto}
   # --- 其他地区分组 End --- #
+
 # ----------------- 地区分组 end ----------------- #
 
 
