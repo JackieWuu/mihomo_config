@@ -26,15 +26,17 @@
 
 请注意！请使用如下命令获取 OpenClash 的 luci 配置，以配合配置文件使用，否则可能不能正常使用博主的配置：
 
-```
+```bash
 wget -O /etc/config/openclash https://cdn.jsdelivr.net/gh/JackieWuu/mihomo_config@main/openclash/openclash
 ```
+
 下载之后即可正常启动 openclash 。
 
 #### 解决因 Geoip.dat 文件无法下载导致 openclash 无法启动的解决办法
 如果是在 openwrt 上面使用 openclash，请使用如下命令在 openwrt 上手动下载 `Geoip.dat` 文件到 openclash 的配置我文件夹：
 
-```
+```bash
 wget -O /etc/openclash/GeoSite.dat https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
 ```
+
 下载之后即可正常启动 openclash 。
