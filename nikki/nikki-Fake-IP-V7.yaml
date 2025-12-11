@@ -170,9 +170,9 @@ dns:
 # ----------------- 锚点 start ----------------- #
 Default: &Default {type: select, proxies: [🎯 代理,🔰 直连,🇭🇰 香港,🇨🇳 台湾,🇯🇵 日本,🇸🇬 新加坡,🇺🇸 美国,🌐 其它地区,🌏 手动选择,🚫 阻断]}
 Proxy: &Proxy {type: select, proxies: [🔙 全节点故障转移,🔰 直连,🇭🇰 香港,🇨🇳 台湾,🇯🇵 日本,🇸🇬 新加坡,🇺🇸 美国,🌐 其它地区,🌏 手动选择]}
-Fallback: &Fallback {type: fallback, interval: 300, lazy: false}
-Select: &Select {type: select, include-all-providers: true, exclude-filter: "实验|应急|续费|流量"}
-Auto: &Auto {type: url-test, interval: 300, tolerance: 100, include-all-providers: true, url: 'https://www.gstatic.com/generate_204', exclude-filter: "实验|应急|续费|流量"}
+Fallback: &Fallback {type: fallback, include-all: true, interval: 300, lazy: false}
+Select: &Select {type: select, include-all: true, exclude-filter: "实验|应急|续费|流量"}
+Auto: &Auto {type: url-test, interval: 300, tolerance: 100, include-all: true, url: 'https://www.gstatic.com/generate_204', exclude-filter: "实验|应急|续费|流量"}
 Block: &Block {type: select, proxies: [🚫 阻断, 🔰 直连]}
 # ----------------- 锚点 end ----------------- #
 
