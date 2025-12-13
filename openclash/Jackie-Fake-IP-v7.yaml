@@ -24,7 +24,6 @@ proxy-providers:
 
 
 # ----------------- OpenClash 高级参数配置 start ----------------- #
-
 # 代理配置
 port: 7890
 socks-port: 7891
@@ -38,11 +37,7 @@ allow-lan: true
 tcp-concurrent: true
 unified-delay: true
 find-process-mode: strict
-global-client-fingerprint: random
-# UI
-external-ui: "/usr/share/openclash/ui"
-external-ui-name: zashboard
-external-controller: '[::]:9090'
+global-client-fingerprint: chrome
 
 profile:
   store-selected: true
@@ -52,6 +47,11 @@ experimental:
   quic-go-disable-gso: false
   quic-go-disable-ecn: false
   dialer-ip4p-convert: false
+
+# UI
+external-ui: "/usr/share/openclash/ui"
+external-ui-name: zashboard
+external-controller: '[::]:9090'
 
 geodata-mode: true
 geodata-loader: standard
@@ -75,7 +75,8 @@ tun:
   endpoint-independent-nat: false
   disable-icmp-forwarding: true
   dns-hijack:
-    - 0.0.0.0:53
+    - any:53
+    - tcp://any:53
   route-exclude-address-set:
     - cn_ip
   route-exclude-address:
@@ -121,8 +122,6 @@ sniffer:
       ports: [443, 8443]
   skip-domain:
     - "+.push.apple.com"
-  # skip-src-address:
-  #   - 10.0.0.5/32
   
 dns:
   enable: true
@@ -135,87 +134,48 @@ dns:
   listen: 0.0.0.0:7874
   fake-ip-range: 198.18.0.0/15
   fake-ip-filter-mode: blacklist
-  respect-rules: false
+  respect-rules: true
   
   fake-ip-filter:
-    - "geosite: google-play@cn,category-speedtest,category-ntp,category-public-tracker,tracker,reddit,category-games-cn,category-games-!cn,category-games@cn,steam@cn,category-game-platforms-download,category-game-accelerator-cn,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn"
+    - rule-set:fakeipfilter
+    - "geosite: google-play@cn,category-ntp,category-public-tracker,tracker,category-games-cn,category-games@cn,steam@cn,category-game-accelerator-cn,apple-cn,icloud@cn,microsoft@cn,cn"
     - "*"
     - "+.lan"
     - "+.local"
+    - "+.push.apple.com"
 
   nameserver-policy:
     "geosite:category-ads-all": rcode://name_error
-    "geosite:google-play@cn,category-ntp,category-public-tracker,tracker,category-games-cn,category-games@cn,steam@cn,category-games-!cn,category-game-platforms-download,apple,apple-cn,icloud,icloud@cn,microsoft@cn,cn":
-    - quic://223.5.5.5
-    - quic://223.6.6.6
 
   default-nameserver:
-    - quic://223.5.5.5
-    - quic://223.6.6.6
+    - https://223.5.5.5/dns-query#h3=true
 
   proxy-server-nameserver:
-    - quic://223.5.5.5
-    - quic://223.6.6.6
+    - https://dns.alidns.com/dns-query#h3=true
+    - https://doh.pub/dns-query#h3=true
   
-  nameserver:
-    - quic://223.5.5.5
-    - quic://223.6.6.6
-
   direct-nameserver:
-    - quic://223.5.5.5
-    - quic://223.6.6.6
+    - https://dns.alidns.com/dns-query#h3=true
+    - https://doh.pub/dns-query#h3=true
 
-  fallback:
-    - 'https://8.8.8.8/dns-query#🎯 代理'
-    - 'https://1.1.1.1/dns-query#🎯 代理'
-
-  fallback-filter:
-    geoip: true
-    geoip-code: cn
-    geosite:
-      - gfw
-    ipcidr:
-      - 0.0.0.0/8
-      - 10.0.0.0/8
-      - 100.64.0.0/10
-      - 127.0.0.0/8
-      - 169.254.0.0/16
-      - 172.16.0.0/12
-      - 192.0.0.0/24
-      - 192.0.2.0/24
-      - 192.88.99.0/24
-      - 192.168.0.0/16
-      - 198.18.0.0/15
-      - 198.51.100.0/24
-      - 203.0.113.0/24
-      - 224.0.0.0/3
-      - ::/127
-      - fc00::/7
-      - fe80::/10
-      - ff00::/8
-    #domain:
-      #- '+.jsdelivr.net'
-
+  nameserver:
+    - "https://1.1.1.1/dns-query#🎯 代理&ecs=223.5.5.0/24"
+    - "https://8.8.8.8/dns-query#🎯 代理&ecs=223.5.5.0/24"
 # ----------------- OpenClash 高级参数配置 end ----------------- #
 
 
 # ----------------- 锚点 start ----------------- #
 Default: &Default {type: select, proxies: [🎯 代理,🔰 直连,🇭🇰 香港,🇨🇳 台湾,🇯🇵 日本,🇸🇬 新加坡,🇺🇸 美国,🌐 其它地区,🌏 手动选择,🚫 阻断]}
-
 Proxy: &Proxy {type: select, proxies: [🔙 全节点故障转移,🔰 直连,🇭🇰 香港,🇨🇳 台湾,🇯🇵 日本,🇸🇬 新加坡,🇺🇸 美国,🌐 其它地区,🌏 手动选择]}
-
-Fallback: &Fallback {type: fallback, interval: 300, lazy: false}
-
-Select: &Select {type: select, include-all-providers: true, exclude-filter: "实验|应急|续费|流量"}
-
-Auto: &Auto {type: url-test, interval: 300, tolerance: 100, include-all-providers: true, url: 'https://www.gstatic.com/generate_204', exclude-filter: "实验|应急|续费|流量"}
-
+Fallback: &Fallback {type: fallback, include-all: true, interval: 300, lazy: false}
+Select: &Select {type: select, include-all: true, exclude-filter: "实验|应急|续费|流量"}
+Auto: &Auto {type: url-test, interval: 300, tolerance: 100, include-all: true, url: 'https://www.gstatic.com/generate_204', exclude-filter: "实验|应急|续费|流量"}
 Block: &Block {type: select, proxies: [🚫 阻断, 🔰 直连]}
 # ----------------- 锚点 end ----------------- #
 
+
 # ----------------- #代理组 start ----------------- #
 proxies:
-
   - {name: "🔰 直连", type: direct, udp: true}
   - {name: "🚫 阻断", type: direct, udp: true}
 
@@ -260,59 +220,37 @@ proxy-groups:
 
 
 # ----------------- 地区分组 start ----------------- #
-
   - {name: 🌏 手动选择, type: select, include-all: true, exclude-filter: "实验|应急|续费|流量"}
-
   - {name: 🔙 全节点故障转移, type: fallback, proxies: [🇭🇰 香港-自动, 🇯🇵 日本-自动,🇸🇬 新加坡-自动,🇨🇳 台湾-自动,🇺🇸 美国-自动,🌐 其它地区-自动]}
 
-
-  # --- 香港分组 Start --- #
   - {name: 🇭🇰 香港, proxies: [🇭🇰 香港-自动, 🇭🇰 香港-手动], type: select,}
   - {name: 🇭🇰 香港-手动, filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$", <<: *Select}
-  - {name: 🇭🇰 香港-自动, filter: "(?i)港|hk|hongkong|hong kong", <<: *Auto}
-  # --- 香港分组 End --- #
+  - {name: 🇭🇰 香港-自动, filter: "(?i)港|hk|hongkong|hong kong", <<: *Fallback}
 
-
-  # --- 日本分组 Start --- #
   - {name: 🇯🇵 日本, proxies: [🇯🇵 日本-自动, 🇯🇵 日本-手动], type: select,}
   - {name: 🇯🇵 日本-手动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Select}
-  - {name: 🇯🇵 日本-自动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Auto}
-  # --- 日本分组 End --- #
+  - {name: 🇯🇵 日本-自动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Fallback}
 
-
-  # --- 新加坡分组 Start --- #
   - {name: 🇸🇬 新加坡, proxies: [🇸🇬 新加坡-自动, 🇸🇬 新加坡-手动], type: select,}
   - {name: 🇸🇬 新加坡-手动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Select}
-  - {name: 🇸🇬 新加坡-自动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Auto}
-  # --- 新加坡分组 End --- #
+  - {name: 🇸🇬 新加坡-自动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Fallback}
 
-
-  # --- 台湾分组 Start --- #
   - {name: 🇨🇳 台湾, proxies: [🇨🇳 台湾-自动, 🇨🇳 台湾-手动], type: select,}
   - {name: 🇨🇳 台湾-手动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Select}
-  - {name: 🇨🇳 台湾-自动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Auto}
-  # --- 台湾分组 End --- #
+  - {name: 🇨🇳 台湾-自动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Fallback}
 
-
-  # --- 美国分组 Start --- #
   - {name: 🇺🇸 美国, proxies: [🇺🇸 美国-自动, 🇺🇸 美国-手动], type: select,}
   - {name: 🇺🇸 美国-手动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Select}
-  - {name: 🇺🇸 美国-自动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Auto}
-  # --- 美国分组 End --- #
+  - {name: 🇺🇸 美国-自动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Fallback}
 
-
-  # --- 其他地区分组 Start --- #
   - {name: 🌐 其它地区, proxies: [🌐 其它地区-自动, 🌐 其它地区-手动], type: select,}
   - {name: 🌐 其它地区-手动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Select}
-  - {name: 🌐 其它地区-自动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Auto}
-  # --- 其他地区分组 End --- #
-
+  - {name: 🌐 其它地区-自动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Fallback}
 # ----------------- 地区分组 end ----------------- #
 
 
 # ----------------- 规则 start ----------------- #
 rules:
-
   # Plex
   - DOMAIN,plex.tv.direct,🔰 直连
   - DOMAIN,v4.plex.tv,🔰 直连
@@ -365,9 +303,7 @@ rules:
 
   # Google&CloudFlare DNS
   - IP-CIDR,8.8.8.8/32,🎯 代理,no-resolve
-  - IP-CIDR,8.8.4.4/32,🎯 代理,no-resolve
   - IP-CIDR,1.1.1.1/32,🎯 代理,no-resolve
-  - IP-CIDR,1.0.0.1/32,🎯 代理,no-resolve
 
   # geoip
   - GEOIP,google,🔎 Google,no-resolve
@@ -382,16 +318,21 @@ rules:
   - MATCH,🐟 漏网之鱼
 # ----------------- 规则 end ----------------- #
 
-# ----------------- rule-set start ----------------- #
 
+# ----------------- rule-set start ----------------- #
 # 以下 rule-set 用于 route-exclude-address-set（排除中国大陆IP）
 rule-anchor:
-
-  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
+  domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
+  class: &class { type: http, interval: 86400, behavior: classical, format: text }
 
 rule-providers:
+  # 用于 route-exclude-address-set（排除中国大陆IP）
   cn_ip:
     <<: *ip
     url: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
 
+  fakeipfilter:
+    <<: *domain
+    url: "https://gh-proxy.com/https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/fakeip-filter.mrs"
 # ----------------- rule-set end ----------------- #
