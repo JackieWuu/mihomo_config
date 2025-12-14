@@ -18,25 +18,16 @@
 
 #### 3.编辑配置文件，并填写订阅地址
 
->如果有多个订阅地址，请根据文件里面的注释自行添加。
+> 如果有多个订阅地址，请根据文件里面的注释自行添加。
 
 ![填写订阅地址](https://dlink.host/1drv/aHR0cHM6Ly8xZHJ2Lm1zL2kvYy80YzkxYzM0ZDhjYThjYTMyL0VVUkp3RHZkUzYxTmprQU1XYTFOREhRQkpLQUZYVnRfZ1ZnMlFrTmlTYU40VUE_ZT1VNjZDWkU.jpg "添加订阅地址")
 
-#### 4.下载配置好的 WebUI 配置文件
+#### 4. 运行配置脚本
 
-请注意！请使用如下命令获取 OpenClash 的 luci 配置，以配合配置文件使用，否则可能不能正常使用博主的配置：
-
-```bash
-wget -O /etc/config/openclash https://cdn.jsdelivr.net/gh/JackieWuu/mihomo_config@main/openclash/openclash
-```
-
-下载之后即可正常启动 openclash 。
-
-#### 解决因 Geoip.dat 文件无法下载导致 openclash 无法启动的解决办法
-如果是在 openwrt 上面使用 openclash，请使用如下命令在 openwrt 上手动下载 `Geoip.dat` 文件到 openclash 的配置我文件夹：
+在 OpenWRT 命令行中运行如下命令：
 
 ```bash
-wget -O /etc/openclash/GeoSite.dat https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+sh -c "$(wget -qO- https://gh-proxy.org/https://raw.githubusercontent.com/JackieWuu/mihomo_config/refs/heads/main/openclash/geo_file_update.sh)"
 ```
 
-下载之后即可正常启动 openclash 。
+脚本执行日志保存在：`/tmp/openclash_update.log`
