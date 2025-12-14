@@ -25,11 +25,11 @@ proxy-providers:
 
 # ----------------- OpenClash 高级参数配置 start ----------------- #
 # 代理配置
-port: 7890
-socks-port: 7891
-redir-port: 7892
-mixed-port: 7893
-tproxy-port: 7895
+port: 7890 # HTTP(S) 代理端口
+socks-port: 7891 # SOCKS5 代理端口
+redir-port: 7892 # 流量转发端口
+mixed-port: 7893 # HTTP(S)&SOCKS5 混合代理端口
+tproxy-port: 7895 # TProxy 端口
 mode: rule
 bind-address: "*"
 ipv6: false
