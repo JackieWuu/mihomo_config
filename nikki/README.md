@@ -1,6 +1,6 @@
 ### Nikki 安装方法
 
-参考[官方项目说明](https://github.com/nikkinikki-org/OpenWrt-nikki?tab=readme-ov-file)。
+参考[官方项目说明](https://github.com/nikkinikki-org/OpenWrt-nikki/blob/main/README.zh.md)。
 
 ### 使用方法（Fake-IP 模式）
 
