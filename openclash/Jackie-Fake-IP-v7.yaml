@@ -39,6 +39,12 @@ unified-delay: true
 find-process-mode: strict
 global-client-fingerprint: chrome
 
+# 减少移动设备耗电问题
+# 详见：https://github.com/vernesong/OpenClash/issues/2614
+# 值参考：https://github.com/nikkinikki-org/OpenWrt-nikki/wiki/FAQ#iphone-%E7%AD%89%E8%AE%BE%E5%A4%87%E5%9C%A8%E9%80%8F%E6%98%8E%E4%BB%A3%E7%90%86%E4%B8%8B%E9%AB%98%E8%80%97%E7%94%B5
+keep-alive-interval: 15
+keep-alive-idle: 600
+
 profile:
   store-selected: true
   store-fake-ip: true
