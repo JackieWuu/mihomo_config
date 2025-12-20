@@ -1,10 +1,10 @@
 # ----------------- 机场订阅 start ----------------- #
 # 锚点
-Sub: &Sub {type: http, interval: 86400, proxy: DIRECT, verride: {ip-version: ipv4-prefer}, health-check: {enable: true, url: https://www.gstatic.com/generate_204, interval: 300}}
+Sub: &Sub {type: http, interval: 86400, proxy: DIRECT,override: {ip-version: ipv4-prefer}, health-check: {enable: true, url: https://www.gstatic.com/generate_204, interval: 300}}
 
-# url 里填写自己的机场订阅链接,名称不能重复。填写在引号之间，每个 provider 填写一个机场订阅链接。
+# url 里填写自己的机场订阅链接,名称（sub-xx）不能重复。填写在引号之间，每个 provider 填写一个机场订阅链接。
 proxy-providers:
-  provider-1:
+  sub-1:
     <<: *Sub
     # 订阅地址
     url: "此处替换为你的订阅链接"
@@ -13,7 +13,7 @@ proxy-providers:
       udp: true
   
   # 第二个订阅连接
-  # provider-2:
+  # sub-2:
   #   <<: *Sub
   #   # 订阅地址
   #   url: "此处替换为你的订阅链接"
@@ -25,11 +25,11 @@ proxy-providers:
 
 # ----------------- OpenClash 高级参数配置 start ----------------- #
 # 代理配置
-port: 8080
-mixed-port: 7890
-redir-port: 7891
-tproxy-port: 7892
-socks-port: 1080
+port: 7890 # HTTP(S) 代理端口
+socks-port: 7891 # SOCKS5 代理端口
+redir-port: 7892 # 流量转发端口
+mixed-port: 7893 # HTTP(S)&SOCKS5 混合代理端口
+tproxy-port: 7895 # TProxy 端口
 mode: rule
 bind-address: "*"
 ipv6: false
@@ -55,14 +55,10 @@ experimental:
   dialer-ip4p-convert: false
 
 # UI
-external-ui: "/etc/nikki/run/ui"
-external-ui-name: "zbashboard"
+external-ui: "/usr/share/openclash/ui"
+external-ui-name: zashboard
 external-ui-url: "https://gh-proxy.com/github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
-external-controller: '[::]:9090'
-# API 认证：默认不开启认证，需要开启的请自行修改
-#secret: "109188"
-#authentication:
-#- nikki:109188
+external-controller: "[::]:9090"
 
 geodata-mode: true
 geodata-loader: standard
@@ -73,7 +69,7 @@ geox-url:
   geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
 
 tun:
-  device: nikki
+  device: utun
   enable: true
   stack: mixed
   auto-route: true
@@ -97,7 +93,7 @@ tun:
     - 17.57.144.0/22
     - 17.188.128.0/18
     - 17.188.20.0/23
-    ## Private IP
+    # 绕过私有IP
     - 0.0.0.0/8
     - 10.0.0.0/8
     - 100.64.0.0/10
@@ -137,7 +133,7 @@ sniffer:
 dns:
   enable: true
   ipv6: false
-  enhanced-mode: redir-host
+  enhanced-mode: fake-ip
   cache-algorithm: arc
   prefer-h3: false
   use-hosts: true
@@ -147,31 +143,31 @@ dns:
   fake-ip-filter-mode: blacklist
   respect-rules: true
   
-  # fake-ip-filter:
-  # - rule-set:fakeipfilter
-  # - "geosite: google-play@cn,category-ntp,category-public-tracker,tracker,category-games-cn,category-games@cn,steam@cn,category-game-accelerator-cn,apple-cn,icloud@cn,microsoft@cn,cn"
-  # - "*"
-  # - "+.lan"
-  # - "+.local"
-  # - "+.push.apple.com"
+  fake-ip-filter:
+    - rule-set:fakeipfilter
+    - "geosite: private,google-play@cn,category-ntp,category-public-tracker,tracker,category-games-cn,category-games@cn,steam@cn,category-game-accelerator-cn,apple-cn,icloud@cn,microsoft@cn,cn"
+    - "*"
+    - "+.lan"
+    - "+.local"
+    - "+.push.apple.com"
 
   nameserver-policy:
     "geosite:category-ads-all": rcode://name_error
 
   default-nameserver:
-    - https://223.5.5.5/dns-query#h3=true
+    - "https://223.5.5.5/dns-query#h3=true"
 
   proxy-server-nameserver:
-    - https://dns.alidns.com/dns-query#h3=true
-    - https://doh.pub/dns-query#h3=true
+    - "https://dns.alidns.com/dns-query#h3=true"
+    - "https://doh.pub/dns-query#h3=true"
   
   direct-nameserver:
-    - https://dns.alidns.com/dns-query#h3=true
-    - https://doh.pub/dns-query#h3=true
+    - "https://dns.alidns.com/dns-query#h3=true"
+    - "https://doh.pub/dns-query#h3=true"
 
   nameserver:
-    - "https://1.1.1.1/dns-query#🎯 代理&ecs=223.5.5.0/24"
-    - "https://8.8.8.8/dns-query#🎯 代理&ecs=223.5.5.0/24"
+    - "https://1.0.0.1/dns-query#🎯 代理&ecs=223.5.5.0/24"
+    - "https://208.67.222.222/dns-query#🎯 代理&ecs=223.5.5.0/24"
 # ----------------- OpenClash 高级参数配置 end ----------------- #
 
 
@@ -185,7 +181,7 @@ Block: &Block {type: select, proxies: [🚫 阻断, 🔰 直连]}
 # ----------------- 锚点 end ----------------- #
 
 
-# ----------------- #代理组 start ----------------- #
+# ----------------- 代理组 start ----------------- #
 proxies:
   - {name: "🔰 直连", type: direct, udp: true}
   - {name: "🚫 阻断", type: direct, udp: true}
@@ -231,32 +227,32 @@ proxy-groups:
 
 
 # ----------------- 地区分组 start ----------------- #
-  - {name: 🌏 手动选择, type: select, include-all: true, exclude-filter: "实验|应急|续费|流量"}
   - {name: 🔙 全节点故障转移, type: fallback, proxies: [🇭🇰 香港-自动, 🇯🇵 日本-自动,🇸🇬 新加坡-自动,🇨🇳 台湾-自动,🇺🇸 美国-自动,🌐 其它地区-自动]}
+  - {name: 🌏 手动选择, type: select, include-all: true, exclude-filter: "实验|应急|续费|流量"}
 
+  # 地理组
   - {name: 🇭🇰 香港, proxies: [🇭🇰 香港-自动, 🇭🇰 香港-手动], type: select,}
-  - {name: 🇭🇰 香港-手动, filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$", <<: *Select}
-  - {name: 🇭🇰 香港-自动, filter: "(?i)港|hk|hongkong|hong kong", <<: *Fallback}
-
   - {name: 🇯🇵 日本, proxies: [🇯🇵 日本-自动, 🇯🇵 日本-手动], type: select,}
-  - {name: 🇯🇵 日本-手动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Select}
-  - {name: 🇯🇵 日本-自动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Fallback}
-
   - {name: 🇸🇬 新加坡, proxies: [🇸🇬 新加坡-自动, 🇸🇬 新加坡-手动], type: select,}
-  - {name: 🇸🇬 新加坡-手动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Select}
-  - {name: 🇸🇬 新加坡-自动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Fallback}
-
   - {name: 🇨🇳 台湾, proxies: [🇨🇳 台湾-自动, 🇨🇳 台湾-手动], type: select,}
-  - {name: 🇨🇳 台湾-手动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Select}
-  - {name: 🇨🇳 台湾-自动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Fallback}
-
   - {name: 🇺🇸 美国, proxies: [🇺🇸 美国-自动, 🇺🇸 美国-手动], type: select,}
-  - {name: 🇺🇸 美国-手动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Select}
-  - {name: 🇺🇸 美国-自动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Fallback}
-
   - {name: 🌐 其它地区, proxies: [🌐 其它地区-自动, 🌐 其它地区-手动], type: select,}
-  - {name: 🌐 其它地区-手动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Select}
+
+  # 地理组自动
+  - {name: 🇭🇰 香港-自动, filter: "(?i)港|hk|hongkong|hong kong", <<: *Fallback}
+  - {name: 🇯🇵 日本-自动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Fallback}
+  - {name: 🇸🇬 新加坡-自动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Fallback}
+  - {name: 🇨🇳 台湾-自动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Fallback}
+  - {name: 🇺🇸 美国-自动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Fallback}
   - {name: 🌐 其它地区-自动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Fallback}
+
+  # 地理组手动
+  - {name: 🇭🇰 香港-手动, filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$", <<: *Select}
+  - {name: 🇯🇵 日本-手动, filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$", <<: *Select}
+  - {name: 🇸🇬 新加坡-手动, filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$", <<: *Select}
+  - {name: 🇨🇳 台湾-手动, filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$", <<: *Select}
+  - {name: 🇺🇸 美国-手动, filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$", <<: *Select}
+  - {name: 🌐 其它地区-手动, filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).)*$", <<: *Select}
 # ----------------- 地区分组 end ----------------- #
 
 
@@ -312,9 +308,9 @@ rules:
   - GEOSITE,private,🔰 直连
   - GEOSITE,cn,🔰 直连
 
-  # Google&CloudFlare DNS
-  - IP-CIDR,8.8.8.8/32,🎯 代理,no-resolve
-  - IP-CIDR,1.1.1.1/32,🎯 代理,no-resolve
+  # CloudFlare & OpenDNS
+  - IP-CIDR,1.0.0.1/32,🎯 代理,no-resolve
+  - IP-CIDR,208.67.222.222/32,🎯 代理,no-resolve
 
   # geoip
   - GEOIP,google,🔎 Google,no-resolve
@@ -337,12 +333,12 @@ rule-anchor:
   class: &class { type: http, interval: 86400, behavior: classical, format: text }
 
 rule-providers:
-  # cn_ip 用于 route-exclude-address-set（排除中国大陆IP）
+  # 用于 route-exclude-address-set（排除中国大陆IP）
   cn_ip:
     <<: *ip
     url: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
 
-  # fakeipfilter 用于 fake-ip-filter 以便返回真实 IP
+  # 用于 Fake IP 过滤
   fakeipfilter:
     <<: *domain
     url: "https://gh-proxy.com/https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/fakeip-filter.mrs"
