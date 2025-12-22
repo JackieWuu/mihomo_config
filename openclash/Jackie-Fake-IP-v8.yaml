@@ -141,15 +141,26 @@ dns:
   listen: 0.0.0.0:7874
   fake-ip-range: 198.18.0.0/15
   fake-ip-filter-mode: blacklist
-  respect-rules: true
+  respect-rules: false
   
   fake-ip-filter:
-    - rule-set:fakeipfilter
-    - "geosite: private,google-play@cn,category-ntp,category-public-tracker,tracker,category-games-cn,category-games@cn,steam@cn,category-game-accelerator-cn,apple-cn,icloud@cn,microsoft@cn,cn"
+    # 常用 Fake IP filter 域名
+    - ruleset:fakeip_filter
+    # BT/PT
+    - "geosite: category-public-tracker,tracker"
+    # Apple & Microsoft
+    - "geosite: apple-cn,apple@cn,apple-update,icloud@cn,microsoft@cn"
+    # 游戏平台（Steam、Epic、暴雪等）
+    - "geosite: category-game-accelerator-cn,category-game-platforms-download@cn,category-games-!cn@cn,category-games-cn,category-games@cn,steam@cn,epicgames@cn，category-game-platforms-download"
+    # Google
+    - "geosite: google-cn,google-play@cn"
+    # 其他
+    - "geosite: private,category-ntp,category-speedtest,nvidia@cn,paypal@cn,cn"
     - "*"
     - "+.lan"
     - "+.local"
     - "+.push.apple.com"
+    - "+.pub.3gppnetwork.org"
 
   nameserver-policy:
     "geosite:category-ads-all": rcode://name_error
@@ -166,17 +177,22 @@ dns:
     - "https://doh.pub/dns-query#h3=true"
 
   nameserver:
-    - "https://1.0.0.1/dns-query#🎯 代理&ecs=223.5.5.0/24"
     - "https://208.67.222.222/dns-query#🎯 代理&ecs=223.5.5.0/24"
+    - "https://1.0.0.1/dns-query#🎯 代理&ecs=223.5.5.0/24"
 # ----------------- OpenClash 高级参数配置 end ----------------- #
 
 
 # ----------------- 锚点 start ----------------- #
 Default: &Default {type: select, proxies: [🎯 代理,🔰 直连,🇭🇰 香港,🇨🇳 台湾,🇯🇵 日本,🇸🇬 新加坡,🇺🇸 美国,🌐 其它地区,🌏 手动选择,🚫 阻断]}
+
 Proxy: &Proxy {type: select, proxies: [🔙 全节点故障转移,🔰 直连,🇭🇰 香港,🇨🇳 台湾,🇯🇵 日本,🇸🇬 新加坡,🇺🇸 美国,🌐 其它地区,🌏 手动选择]}
+
 Fallback: &Fallback {type: fallback, include-all: true, interval: 300, lazy: false}
+
 Select: &Select {type: select, include-all: true, exclude-filter: "实验|应急|续费|流量"}
+
 Auto: &Auto {type: url-test, interval: 300, tolerance: 100, include-all: true, url: 'https://www.gstatic.com/generate_204', exclude-filter: "实验|应急|续费|流量"}
+
 Block: &Block {type: select, proxies: [🚫 阻断, 🔰 直连]}
 # ----------------- 锚点 end ----------------- #
 
@@ -192,32 +208,38 @@ proxy-groups:
   # Google
   - {name: 🔎 Google, <<: *Default}
   - {name: 🏪 GooglePlay, <<: *Default}
-  # 流媒体
+  # 流媒体 & 音乐
   - {name: 🎞️ YouTube, <<: *Default}
   - {name: 🎬 HBO, <<: *Default}
   - {name: 📽️ Disney, <<: *Default}
   - {name: 🍿 Netflix, <<: *Default}
-  # Music & Video
   - {name: 🎧 Spotify, <<: *Default}
-  - {name: 💓 Tiktok, <<: *Default}
   # Game
   - {name: 🎮 Steam, <<: *Default}
+  - {name: 🎮 Epic, <<: *Default}
+  - {name: 🎮 Origin, <<: *Default}
   - {name: 🕹️ 其他游戏平台, <<: *Default}
   # 社交媒体
+  - {name: 💓 Tiktok, <<: *Default}
   - {name: 🦜 Twitter, <<: *Default}
-  - {name: ☎️ Telegram, <<: *Default}
+  - {name: 🗣️ 国外社交平台, <<: *Default}
   # AI 
   - {name: 🤖 OpenAI, <<: *Default}
   - {name: 🤖 Gemini, <<: *Default}
-  - {name: 🤖 AI, <<: *Default}
+  - {name: 🤖 Apple Intelligence, <<: *Default }
+  - {name: 🤖 其他AI, <<: *Default}
   # Apple
   - {name: 🍎 Apple, <<: *Default}
   - {name: ☁️ iCloud, <<: *Default}
   # Microsoft
-  - {name: Ⓜ️ OneDrive, <<: *Default}
+  - {name: 📥 OneDrive, <<: *Default}
   - {name: Ⓜ️ Microsoft, <<: *Default}
   - {name: 🖥️ Github, <<: *Default}
   # 其他
+  - {name: ☎️ Telegram, <<: *Default}
+  - {name: ↕️ PT站点, <<: *Default}
+  - {name: 💶 PayPal, <<: *Default}
+  - {name: 🔌 Nvidia, <<: *Default}
   - {name: 🐋 Docker, <<: *Default}
   - {name: ⏩ Speedtest, <<: *Default}
   - {name: 🚫 广告拦截, <<: *Block}
@@ -258,67 +280,95 @@ proxy-groups:
 
 # ----------------- 规则 start ----------------- #
 rules:
-  # Plex
+  # 自定义规则
   - DOMAIN,plex.tv.direct,🔰 直连
   - DOMAIN,v4.plex.tv,🔰 直连
   - DOMAIN,plex.direct,🔰 直连
   - DOMAIN-SUFFIX,plex.tv,🎯 代理
-
-  # 其他自定义规则
-  - DOMAIN-SUFFIX,jsdelivr.net,🔰 直连
   - DOMAIN-SUFFIX,ghfast.top,🔰 直连
   - DOMAIN-SUFFIX,gh-proxy.com,🔰 直连
-
-  # geosite
   - GEOSITE,category-ads-all,🚫 广告拦截
+
+  # --- geosite 直连域名 start --- #
+  - GEOSITE,private,🔰 直连
   - GEOSITE,category-ntp,🔰 直连
+  - GEOSITE,jsdelivr,🔰 直连
+  # BT/PT
   - GEOSITE,category-public-tracker,🔰 直连
-  - GEOSITE,nvidia,🔰 直连
-  - GEOSITE,apple-cn,🔰 直连
-  - GEOSITE,google-play@cn,🔰 直连
-  - GEOSITE,microsoft@cn,🔰 直连
+  # 游戏平台
   - GEOSITE,steam@cn,🔰 直连
-  - GEOSITE,category-games-cn,🔰 直连
-  - GEOSITE,category-games@cn,🔰 直连
   - GEOSITE,category-game-platforms-download,🔰 直连
   - GEOSITE,category-game-accelerator-cn,🔰 直连
+  - GEOSITE,category-games-cn,🔰 直连
+  - GEOSITE,category-games@cn,🔰 直连
+  # Apple
+  - GEOSITE,apple-cn,🔰 直连
+  - GEOSITE,apple@cn,🔰 直连
+  - GEOSITE,apple-update,🔰 直连
+  - GEOSITE,icloud@cn,🔰 直连
+  # Microsoft
+  - GEOSITE,microsoft@cn,🔰 直连
+  # Google
+  - GEOSITE,google-play@cn,🔰 直连
+  # 其他
+  - GEOSITE,nvidia@cn,🔰 直连
+  - GEOSITE,paypal@cn,🔰 直连
+  - GEOSITE,category-ddns,🔰 直连
+  - GEOSITE,cn,🔰 直连
+  # --- geosite 直连域名 end --- #
 
-  - GEOSITE,steam,🎮 Steam
-  - GEOSITE,category-games-!cn,🕹️ 其他游戏平台
+  # --- geosite 代理组 start --- #
+  # 测速
   - GEOSITE,category-speedtest,⏩ Speedtest
-  - GEOSITE,google-gemini,🤖 Gemini
+  # 游戏
+  - GEOSITE,steam,🎮 Steam
+  - GEOSITE,epicgames,🎮 Epic
+  - GEOSITE,origin,🎮 Origin
+  - GEOSITE,category-games-!cn,🕹️ 其他游戏平台
+  - GEOSITE,category-game-platforms-download,🕹️ 其他游戏平台
+  - GEOSITE,category-games,🕹️ 其他游戏平台
+  # AI
   - GEOSITE,openai,🤖 OpenAI
-  - GEOSITE,category-ai-chat-!cn,🤖 AI
+  - GEOSITE,google-gemini,🤖 Gemini
+  - GEOSITE,apple-intelligence,🤖 Apple Intelligence
+  - GEOSITE,category-ai-chat-!cn,🤖 其他AI
+  # Apple
   - GEOSITE,icloud,☁️ iCloud
   - GEOSITE,apple,🍎 Apple
-  - GEOSITE,github,🖥️ Github
+  # 流媒体 & 音乐
   - GEOSITE,hbo,🎬 HBO
   - GEOSITE,disney,📽️ Disney
   - GEOSITE,netflix,🍿 Netflix
   - GEOSITE,youtube,🎞️ YouTube
-  - GEOSITE,onedrive,Ⓜ️ OneDrive
-  - GEOSITE,microsoft,Ⓜ️ Microsoft
-  - GEOSITE,tiktok,💓 Tiktok
-  - GEOSITE,docker,🐋 Docker
   - GEOSITE,spotify ,🎧 Spotify
+  # 社交平台
+  - GEOSITE,tiktok,💓 Tiktok
   - GEOSITE,twitter,🦜 Twitter
+  - GEOSITE,category-social-media-!cn,🗣️ 国外社交平台
+  # Microsoft
+  - GEOSITE,github,🖥️ Github
+  - GEOSITE,onedrive,📥 OneDrive
+  - GEOSITE,microsoft,Ⓜ️ Microsoft
+  # Google
   - GEOSITE,google-play,🏪 GooglePlay
   - GEOSITE,google,🔎 Google
-  - GEOSITE,geolocation-!cn,🎯 代理
-  - GEOSITE,private,🔰 直连
-  - GEOSITE,cn,🔰 直连
+  # 其他
+  - GEOSITE,tracker, ↕️ PT站点
+  - GEOSITE,paypal,💶 PayPal
+  - GEOSITE,nvidia,🔌 Nvidia
+  - GEOSITE,docker,🐋 Docker
+  # 其他国外域名
+  - GEOSITE,geolocation-!cn,⚙️ 非国内地址
+  # --- geosite 代理组 end --- #
 
-  # CloudFlare & OpenDNS
-  - IP-CIDR,1.0.0.1/32,🎯 代理,no-resolve
-  - IP-CIDR,208.67.222.222/32,🎯 代理,no-resolve
-
-  # geoip
+  # --- geoip 代理组 start --- #
   - GEOIP,google,🔎 Google,no-resolve
   - GEOIP,telegram,☎️ Telegram,no-resolve
   - GEOIP,netflix,🍿 Netflix,no-resolve
   - GEOIP,twitter,🦜 Twitter,no-resolve
   - GEOIP,private,🔰 直连,no-resolve
   - RULE-SET,cn_ip,🔰 直连,no-resolve
+  # --- geoip 代理组 end --- #
 
   # 兜底规则
   - DST-PORT,80/8080/443/8443,⚙️ 非国内地址
@@ -339,7 +389,7 @@ rule-providers:
     url: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
 
   # 用于 Fake IP 过滤
-  fakeipfilter:
+  fakeip_filter:
     <<: *domain
     url: "https://gh-proxy.com/https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/fakeip-filter.mrs"
 # ----------------- rule-set end ----------------- #
