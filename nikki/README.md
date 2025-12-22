@@ -1,8 +1,8 @@
-### Nikki 安装方法
+### 一、Nikki 安装方法
 
 参考[官方项目说明](https://github.com/nikkinikki-org/OpenWrt-nikki/blob/main/README.zh.md)。
 
-### 使用方法（Fake-IP 模式）
+### 二、使用方法（Fake-IP 模式）
 
 下载 `.yaml` 文件，根据文件里面的注释添加上订阅链接。
 
