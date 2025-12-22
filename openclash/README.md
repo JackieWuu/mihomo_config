@@ -27,3 +27,9 @@
 ```
 sh -c "$(wget -qO- https://gh-proxy.org/https://raw.githubusercontent.com/JackieWuu/mihomo_config/refs/heads/main/openclash/geo_file_update.sh)"
 ```
+
+### 三、建议
+
+大多数用户使用 Real-IP 配置文件即可，Fake-IP 的配置文件适合高级用户。如果使用 Real-IP 配置文件，请记得在 OpenClash 面板中将 `运行模式` 切换为 `Redir-Host（TUN-混合）模式`：
+
+<img width="1129" height="648" alt="PixPin_2025-12-22_13-42-59" src="https://github.com/user-attachments/assets/e4bb08e4-0460-45e1-b185-1b0895991f5e" />
