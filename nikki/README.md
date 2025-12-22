@@ -1,3 +1,7 @@
+### 说明
+
+两个 `yaml` 文件是博主自用的 OpenClash 配置，里面自带了多个在线更新的规则集，可以满足绝大部分的使用场景，并且读者只需要在配置文件中填写上自己的订阅地址，即可直接使用。
+
 ### 一、Nikki 安装方法
 
 参考[官方项目说明](https://github.com/nikkinikki-org/OpenWrt-nikki/blob/main/README.zh.md)。
