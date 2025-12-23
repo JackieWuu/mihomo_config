@@ -181,8 +181,8 @@ dns:
     - "https://doh.pub/dns-query#h3=true"
 
   nameserver:
-    - "https://208.67.222.222/dns-query#🎯 代理&ecs=223.5.5.0/24"
-    - "https://1.0.0.1/dns-query#🎯 代理&ecs=223.5.5.0/24"
+    - "https://dns.alidns.com/dns-query#h3=true"
+    - "https://doh.pub/dns-query#h3=true"
 # ----------------- OpenClash 高级参数配置 end ----------------- #
 
 
