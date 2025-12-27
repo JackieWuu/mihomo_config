@@ -12,7 +12,7 @@ proxy-providers:
       additional-prefix: "[✈️-1]"
       udp: true
   
-  # 第二个订阅连接
+  # 第二个订阅连接（去掉注释使用）
   # sub-2:
   #   <<: *Sub
   #   # 订阅地址
@@ -120,70 +120,71 @@ tun:
 
 sniffer:
   enable: true
-  force-dns-mapping: true
+  force-dns-mapping: false
   parse-pure-ip: true
   override-destination: true
   sniff:
     HTTP:
       ports: [80, 8080-8880]
-      override-destination: true
     TLS:
       ports: [443, 8443]
     QUIC:
       ports: [443, 8443]
   skip-domain:
+    - "geosite: private"
+    # 防止米家、苹果设备异常
+    - "Mijia Cloud"
     - "+.push.apple.com"
+    
   
 dns:
   enable: true
   ipv6: false
-  enhanced-mode: redir-host
+  enhanced-mode: fake-ip
   cache-algorithm: arc
   prefer-h3: false
   use-hosts: true
   use-system-hosts: false
   listen: 0.0.0.0:7874
+  fake-ip-range: 198.18.0.0/15
+  fake-ip-filter-mode: blacklist
   respect-rules: false
-  # fake-ip-range: 198.18.0.0/15
-  # fake-ip-filter-mode: blacklist
   
-  # fake-ip-filter:
-  #   # 常用 Fake IP filter 域名
-  #   - ruleset:fakeip_filter
-  #   # BT/PT
-  #   - "geosite: category-public-tracker,tracker"
-  #   # Apple & Microsoft
-  #   - "geosite: apple-cn,apple@cn,apple-update,icloud@cn,microsoft@cn"
-  #   # 游戏平台（Steam、Epic、暴雪等）
-  #   - "geosite: category-game-accelerator-cn,category-game-platforms-download@cn,category-games-!cn@cn,category-games-cn,category-games@cn,steam@cn,epicgames@cn，category-game-platforms-download"
-  #   # Google
-  #   - "geosite: google-cn,google-play@cn"
-  #   # 其他
-  #   - "geosite: private,category-ntp,category-speedtest,nvidia@cn,paypal@cn,cn"
-  #   - "*"
-  #   - "+.lan"
-  #   - "+.local"
-  #   - "+.push.apple.com"
-  #   - "+.pub.3gppnetwork.org"
+  fake-ip-filter:
+    # 常用 Fake IP filter 域名
+    - ruleset:fakeip_filter
+    # BT/PT
+    - "geosite: category-public-tracker,tracker"
+    # Microsoft && Apple
+    - "geosite: microsoft,onedrive,apple,icloud"
+    # 游戏平台（Steam、Epic、PS等）
+    - "geosite: steam,epicgames,xbox,playstation,origin,category-games-cn,category-games-!cn,category-games,category-game-accelerator-cn,category-game-platforms-download"
+    # Google
+    - "geosite: google-cn,google-play@cn"
+    # 其他
+    - "geosite: private,jsdelivr,category-ntp@cn,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn"
+    - "+.lan"
+    - "+.local"
+    - "+.push.apple.com"
+    - "+.pub.3gppnetwork.org"
+    # 解决 Windows 连通性检测问题
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
 
-  nameserver-policy:
-    "geosite:category-ads-all": rcode://name_error
+  "geosite:category-ads-all": rcode://name_error
 
   default-nameserver:
     - "https://223.5.5.5/dns-query#h3=true"
+    - "https://119.29.29.29/dns-query#h3=true"
 
   proxy-server-nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
     - "https://doh.pub/dns-query#h3=true"
-  
-  direct-nameserver:
-    - "https://dns.alidns.com/dns-query#h3=true"
-    - "https://doh.pub/dns-query#h3=true"
 
   nameserver:
-    - "https://dns.alidns.com/dns-query#h3=true"
-    - "https://doh.pub/dns-query#h3=true"
-
+    - "223.5.5.5"
+    - "119.29.29.29"
+  
   fallback:
     - "https://208.67.222.222/dns-query#🎯 代理#h3=true"
     - "https://1.0.0.1/dns-query#🎯 代理#h3=true#"
@@ -191,8 +192,6 @@ dns:
   fallback-filter:
     geoip: true
     geoip-code: cn
-    geosite:
-      - gfw
     ipcidr:
       - 0.0.0.0/8
       - 10.0.0.0/8
@@ -252,6 +251,8 @@ proxy-groups:
   # Game
   - {name: 🎮 Steam, <<: *Default}
   - {name: 🎮 Epic, <<: *Default}
+  - {name: 🎮 PlayStation, <<: *Default}
+  - {name: 🎮 XBOX, <<: *Default}
   - {name: 🎮 Origin, <<: *Default}
   - {name: 🕹️ 其他游戏平台, <<: *Default}
   # 社交媒体
@@ -325,41 +326,51 @@ rules:
   - GEOSITE,category-ads-all,🚫 广告拦截
 
 
-
-  # --- geosite 直连域名 start --- #
-  - GEOSITE,private,🔰 直连
-  - GEOSITE,category-ntp,🔰 直连
-  - GEOSITE,jsdelivr,🔰 直连
+  # -------- geosite 直连域名 start -------- #
   # BT/PT
   - GEOSITE,category-public-tracker,🔰 直连
-  # 游戏平台
-  - GEOSITE,steam@cn,🔰 直连
-  - GEOSITE,category-game-platforms-download,🔰 直连
-  - GEOSITE,category-game-accelerator-cn,🔰 直连
-  - GEOSITE,category-games-cn,🔰 直连
-  - GEOSITE,category-games@cn,🔰 直连
-  # Apple
+
+  # Apple 的 CN 域名
   - GEOSITE,apple-cn,🔰 直连
   - GEOSITE,apple@cn,🔰 直连
-  - GEOSITE,apple-update,🔰 直连
   - GEOSITE,icloud@cn,🔰 直连
-  # Microsoft
+  - GEOSITE,apple-update,🔰 直连
+  
+  # Microsoft 的 CN 域名
   - GEOSITE,microsoft@cn,🔰 直连
-  # Google
+
+  # 游戏平台（Steam、Epic、PS等）的 CN 域名（共8个集合）
+  - GEOSITE,steam@cn,🔰 直连
+  - GEOSITE,epicgames@cn,🔰 直连
+  - GEOSITE,xbox@cn,🔰 直连
+  - GEOSITE,category-games-cn,🔰 直连
+  - GEOSITE,category-games@cn,🔰 直连
+  - GEOSITE,category-games-!cn@cn,🔰 直连
+  - GEOSITE,category-game-accelerator-cn,🔰 直连
+  - GEOSITE,category-game-platforms-download@cn,🔰 直连
+
+  # Google 的 CN 域名
   - GEOSITE,google-play@cn,🔰 直连
-  # 其他
+
+  # 其他可直连域名
+  - GEOSITE,private,🔰 直连
+  - GEOSITE,jsdelivr,🔰 直连
+  - GEOSITE,category-ntp,🔰 直连
+  - GEOSITE,category-ddns,🔰 直连
   - GEOSITE,nvidia@cn,🔰 直连
   - GEOSITE,paypal@cn,🔰 直连
-  - GEOSITE,category-ddns,🔰 直连
   - GEOSITE,cn,🔰 直连
-  # --- geosite 直连域名 end --- #
+  # -------- geosite 直连域名 end -------- #
 
-  # --- geosite 代理组 start --- #
+
+  # -------- geosite 代理组 start -------- #
   # 测速
   - GEOSITE,category-speedtest,⏩ Speedtest
   # 游戏
   - GEOSITE,steam,🎮 Steam
   - GEOSITE,epicgames,🎮 Epic
+  - GEOSITE,playstation,🎮 XBOX
+  - GEOSITE,xbox,🎮 PlayStation
   - GEOSITE,origin,🎮 Origin
   - GEOSITE,category-games-!cn,🕹️ 其他游戏平台
   - GEOSITE,category-game-platforms-download,🕹️ 其他游戏平台
@@ -395,17 +406,20 @@ rules:
   - GEOSITE,nvidia,🔌 Nvidia
   - GEOSITE,docker,🐋 Docker
   # 其他国外域名
+  - GEOSITE,gfw,⚙️ 非国内地址
   - GEOSITE,geolocation-!cn,⚙️ 非国内地址
-  # --- geosite 代理组 end --- #
+  # -------- geosite 代理组 end -------- #
 
-  # --- geoip 代理组 start --- #
+
+  # -------- geoip 代理组 start -------- #
   - GEOIP,google,🔎 Google,no-resolve
   - GEOIP,telegram,☎️ Telegram,no-resolve
   - GEOIP,netflix,🍿 Netflix,no-resolve
   - GEOIP,twitter,🦜 Twitter,no-resolve
   - GEOIP,private,🔰 直连,no-resolve
   - RULE-SET,cn_ip,🔰 直连,no-resolve
-  # --- geoip 代理组 end --- #
+  # -------- geoip 代理组 end -------- #
+
 
   # 兜底规则
   - DST-PORT,80/8080/443/8443,⚙️ 非国内地址
@@ -420,7 +434,7 @@ rule-anchor:
   class: &class { type: http, interval: 86400, behavior: classical, format: text }
 
 rule-providers:
-  # 用于 route-exclude-address-set（排除中国大陆IP）
+  # 用于 route-exclude-address-set 排除中国大陆IP
   cn_ip:
     <<: *ip
     url: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
