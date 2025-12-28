@@ -126,10 +126,14 @@ sniffer:
     QUIC:
       ports: [443, 8443]
   skip-domain:
-    - "geosite: private"
-    # 防止米家、苹果设备异常
+    - "*"
+    - "geosite:private"
+    - "geosite:cn"
     - "Mijia Cloud"
     - "+.push.apple.com"
+    - "dlg.io.mi.com"
+    - "+.oray.com"
+    - "+.sunlogin.net"
     
   
 dns:
@@ -158,6 +162,7 @@ dns:
     - "geosite: google-cn,google-play@cn"
     # 其他
     - "geosite: private,jsdelivr,category-ntp@cn,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn"
+    - "*"
     - "+.lan"
     - "+.local"
     - "+.push.apple.com"
