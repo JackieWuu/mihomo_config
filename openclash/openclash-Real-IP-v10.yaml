@@ -157,8 +157,8 @@ dns:
     - ruleset:fakeip_filter
     # BT/PT
     - "geosite: category-public-tracker,tracker"
-    # Microsoft && Apple
-    - "geosite: microsoft,onedrive,apple,icloud"
+    # Apple
+    - "geosite: apple,icloud"
     # 游戏平台（Steam、Epic、PS等）
     - "geosite: steam,epicgames,xbox,playstation,origin,category-games-cn,category-games-!cn,category-games,category-game-accelerator-cn,category-game-platforms-download"
     # Google
@@ -333,13 +333,11 @@ rules:
   # BT/PT
   - GEOSITE,category-public-tracker,🔰 直连
 
-  # Apple 的 CN 域名
+  # Apple & Microsoft 的 CN 域名
   - GEOSITE,apple-cn,🔰 直连
   - GEOSITE,apple@cn,🔰 直连
   - GEOSITE,icloud@cn,🔰 直连
   - GEOSITE,apple-update,🔰 直连
-  
-  # Microsoft 的 CN 域名
   - GEOSITE,microsoft@cn,🔰 直连
 
   # 游戏平台（Steam、Epic、PS等）的 CN 域名（共8个集合）
