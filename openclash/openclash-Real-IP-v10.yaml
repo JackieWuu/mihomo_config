@@ -189,8 +189,8 @@ dns:
     - "119.29.29.29"
   
   fallback:
-    - "https://208.67.222.222/dns-query#🎯 代理#h3=true"
-    - "https://1.0.0.1/dns-query#🎯 代理#h3=true"
+    - "https://208.67.222.222/dns-query#🎯 代理"
+    - "https://1.0.0.1/dns-query#🎯 代理"
 
   fallback-filter:
     geoip: true
