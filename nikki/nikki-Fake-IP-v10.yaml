@@ -329,8 +329,7 @@ rules:
   - DOMAIN,v4.plex.tv,🔰 直连
   - DOMAIN,plex.direct,🔰 直连
   - DOMAIN-SUFFIX,plex.tv,🎯 代理
-  - DOMAIN-SUFFIX,ghfast.top,🔰 直连
-  - DOMAIN-SUFFIX,gh-proxy.com,🔰 直连
+  - DOMAIN-KEYWORD,gh-proxy,🔰 直连
   - GEOSITE,category-ads-all,🚫 广告拦截
 
 
