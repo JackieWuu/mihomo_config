@@ -67,6 +67,9 @@ geo-update-interval: 24
 geox-url:
   geoip: "https://gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat"
   geosite: "https://gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  # Gitee 仓库镜像：如果上面的链接无法下载，请使用下面的链接
+  # geoip: "https://gitee.com/jackiewuu/unraid/raw/master/geo/geoip-lite.dat"
+  # geosite: "https://gitee.com/jackiewuu/unraid/raw/master/geo/geosite.dat"
 
 tun:
   device: utun
