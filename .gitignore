@@ -1,5 +1,5 @@
-/node_modules
 /test
+/.claude
 config.ini
 ​*.log
 .prettierignore
