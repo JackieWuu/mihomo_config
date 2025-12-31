@@ -237,7 +237,7 @@ Block: &Block {type: select, proxies: [🚫 阻断, 🔰 直连]}
 # ----------------- 代理组 start ----------------- #
 proxies:
   - {name: "🔰 直连", type: direct, udp: true}
-  - {name: "🚫 阻断", type: direct, udp: true}
+  - {name: "🚫 阻断", type: reject, udp: true}
 
 proxy-groups:
   # 代理组
