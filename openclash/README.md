@@ -1,3 +1,7 @@
+### 注意
+
+2026/1/4：OpenClash 的规则不再更新，建议使用 Nikki 替代 OpenClash。如果需要继续使用 OpenClash，推荐大家使用此项目：[Custom_OpenClash_Rules](https://github.com/Aethersailor/Custom_OpenClash_Rules)。
+
 ### 一、说明
 
 两个 `yaml` 文件是博主自用的 OpenClash 配置文件，里面自带了多个在线更新的规则集，可以满足绝大部分的使用场景，并且读者只需要在配置文件中填写上自己的订阅地址，即可直接使用。
