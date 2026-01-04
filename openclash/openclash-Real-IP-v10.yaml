@@ -170,6 +170,10 @@ dns:
     - "https://dns.alidns.com/dns-query#h3=true"
     - "https://doh.pub/dns-query#h3=true"
 
+  direct-nameserver:
+    - "https://dns.alidns.com/dns-query#h3=true"
+    - "https://doh.pub/dns-query#h3=true"
+
   nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
     - "https://doh.pub/dns-query#h3=true"
