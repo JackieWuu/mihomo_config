@@ -154,7 +154,7 @@ sniffer:
 dns:
   enable: true
   ipv6: false
-  enhanced-mode: fake-ip
+  enhanced-mode: redir-host
   cache-algorithm: arc
   prefer-h3: false
   use-hosts: true

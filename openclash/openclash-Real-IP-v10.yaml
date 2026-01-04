@@ -150,7 +150,7 @@ sniffer:
 dns:
   enable: true
   ipv6: false
-  enhanced-mode: fake-ip
+  enhanced-mode: redir-host
   cache-algorithm: arc
   prefer-h3: false
   use-hosts: true
@@ -171,8 +171,8 @@ dns:
     - "https://doh.pub/dns-query#h3=true"
 
   nameserver:
-    - "223.5.5.5"
-    - "119.29.29.29"
+    - "https://dns.alidns.com/dns-query#h3=true"
+    - "https://doh.pub/dns-query#h3=true"
   
   fallback:
     - "https://208.67.222.222/dns-query#🎯 代理"

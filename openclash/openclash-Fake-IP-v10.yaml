@@ -197,38 +197,38 @@ dns:
   nameserver-policy:
     # 常用 Fake IP filter 域名
     "ruleset:fakeip_filter":
-      - "https://doh.opendns.com/dns-query#🎯 代理#h3=true"
-      - "https://cloudflare-dns.com/dns-query#🎯 代理#h3=true"
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
 
     # BT/PT
     "geosite: category-public-tracker,tracker":
-      - "https://doh.opendns.com/dns-query#🎯 代理#h3=true"
-      - "https://cloudflare-dns.com/dns-query#🎯 代理#h3=true"
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
 
     # Apple
     "geosite: apple,icloud":
-      - "https://doh.opendns.com/dns-query#🎯 代理#h3=true"
-      - "https://cloudflare-dns.com/dns-query#🎯 代理#h3=true"
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
 
     # 游戏平台（Steam、Epic、PS等）
     "geosite: steam,epicgames,xbox,playstation,origin,category-games-cn,category-games-!cn,category-games,category-game-accelerator-cn,category-game-platforms-download":
-      - "https://doh.opendns.com/dns-query#🎯 代理#h3=true"
-      - "https://cloudflare-dns.com/dns-query#🎯 代理#h3=true"
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
 
     # Google
     "geosite: google-cn,google-play@cn":
-      - "https://doh.opendns.com/dns-query#🎯 代理#h3=true"
-      - "https://cloudflare-dns.com/dns-query#🎯 代理#h3=true"
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
 
     # 其他
     "geosite: jsdelivr,category-ntp@cn,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn":
-      - "https://doh.opendns.com/dns-query#🎯 代理#h3=true"
-      - "https://cloudflare-dns.com/dns-query#🎯 代理#h3=true"
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
   # ---------- nameserver-policy end ---------- #
 
   nameserver:
-    - "223.5.5.5"
-    - "119.29.29.29"
+    - "https://dns.alidns.com/dns-query#h3=true"
+    - "https://doh.pub/dns-query#h3=true"
 
   fallback:
     - "https://208.67.222.222/dns-query#🎯 代理"
