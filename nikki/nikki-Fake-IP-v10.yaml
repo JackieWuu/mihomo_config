@@ -195,10 +195,6 @@ dns:
   proxy-server-nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
     - "https://doh.pub/dns-query#h3=true"
-  
-  direct-nameserver:
-    - "https://dns.alidns.com/dns-query#h3=true"
-    - "https://doh.pub/dns-query#h3=true"
 
   # ---------- nameserver-policy start ---------- #
   # fake-ip-filter 中的域名集合（即 redir-host 的域名指定域名解析服务器），需要说明的是，这里指定 DNS 服务器仅仅只是为了获取 IP 用于分流，并不意味着将解析结果进行连接。
