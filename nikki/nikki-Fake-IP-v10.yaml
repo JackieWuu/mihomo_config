@@ -194,67 +194,67 @@ dns:
 
   proxy-server-nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
-    - "https://doh.pub/dns-query#h3=true"
+    - "https://doh.pub/dns-query"
 
   # ---------- nameserver-policy start ---------- #
   # fake-ip-filter 中的域名集合（即 redir-host 的域名指定域名解析服务器），需要说明的是，这里指定 DNS 服务器仅仅只是为了获取 IP 用于分流，并不意味着将解析结果进行连接。
   nameserver-policy:
     "+.push.apple.com":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
     "+.mi.com":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
     "+.oray.com":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
     "+.sunlogin.net":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
     "+.pub.3gppnetwork.org":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
     "+.msftconnecttest.com":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
     "+.msftncsi.com":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
 
     # 常用 Fake IP filter 域名
     "ruleset:fakeip_filter":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
 
     # BT/PT
     "geosite: category-public-tracker,tracker":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
 
     # Apple
     "geosite: apple,icloud":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
 
     # 游戏平台（Steam、Epic、PS等）
     "geosite: steam,epicgames,xbox,playstation,origin,category-games-cn,category-games-!cn,category-games,category-game-accelerator-cn,category-game-platforms-download":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
 
     # Google
     "geosite: google-cn,google-play@cn":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
 
     # 其他
     "geosite: jsdelivr,category-ntp,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn":
       - "https://dns.alidns.com/dns-query#h3=true"
-      - "https://doh.pub/dns-query#h3=true"
+      - "https://doh.pub/dns-query"
   # ---------- nameserver-policy end ---------- #
 
   nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
-    - "https://doh.pub/dns-query#h3=true"
+    - "https://doh.pub/dns-query"
 
   fallback:
     - "https://208.67.222.222/dns-query#🎯 代理"

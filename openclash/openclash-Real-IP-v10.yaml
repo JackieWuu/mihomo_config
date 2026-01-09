@@ -168,11 +168,11 @@ dns:
 
   proxy-server-nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
-    - "https://doh.pub/dns-query#h3=true"
+    - "https://doh.pub/dns-query"
 
   nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
-    - "https://doh.pub/dns-query#h3=true"
+    - "https://doh.pub/dns-query"
   
   fallback:
     - "https://208.67.222.222/dns-query#🎯 代理"
