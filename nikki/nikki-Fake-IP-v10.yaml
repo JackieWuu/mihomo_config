@@ -176,7 +176,7 @@ dns:
     # Google
     - "geosite: google-cn,google-play@cn"
     # 其他
-    - "geosite: private,jsdelivr,category-ntp@cn,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn"
+    - "geosite: private,jsdelivr,category-ntp,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn"
     - "*"
     - "+.lan"
     - "+.local"
@@ -190,7 +190,7 @@ dns:
 
   default-nameserver:
     - "https://223.5.5.5/dns-query#h3=true"
-    - "https://119.29.29.29/dns-query#h3=true"
+    - "https://223.6.6.6/dns-query#h3=true"
 
   proxy-server-nameserver:
     - "https://dns.alidns.com/dns-query#h3=true"
@@ -199,6 +199,28 @@ dns:
   # ---------- nameserver-policy start ---------- #
   # fake-ip-filter 中的域名集合（即 redir-host 的域名指定域名解析服务器），需要说明的是，这里指定 DNS 服务器仅仅只是为了获取 IP 用于分流，并不意味着将解析结果进行连接。
   nameserver-policy:
+    "+.push.apple.com":
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
+    "+.mi.com":
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
+    "+.oray.com":
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
+    "+.sunlogin.net":
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
+    "+.pub.3gppnetwork.org":
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
+    "+.msftconnecttest.com":
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
+    "+.msftncsi.com":
+      - "https://dns.alidns.com/dns-query#h3=true"
+      - "https://doh.pub/dns-query#h3=true"
+
     # 常用 Fake IP filter 域名
     "ruleset:fakeip_filter":
       - "https://dns.alidns.com/dns-query#h3=true"
@@ -225,7 +247,7 @@ dns:
       - "https://doh.pub/dns-query#h3=true"
 
     # 其他
-    "geosite: jsdelivr,category-ntp@cn,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn":
+    "geosite: jsdelivr,category-ntp,category-ddns,category-speedtest@cn,nvidia@cn,paypal@cn,cn":
       - "https://dns.alidns.com/dns-query#h3=true"
       - "https://doh.pub/dns-query#h3=true"
   # ---------- nameserver-policy end ---------- #
